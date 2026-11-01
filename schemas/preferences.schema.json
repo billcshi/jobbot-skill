@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Reusable job-search preferences, separate from candidate facts and document settings",
+  "type": "object",
+  "required": ["schema_version", "target_roles", "locations", "work_modes", "compensation", "deal_breakers"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "target_roles": { "$ref": "#/$defs/strings" },
+    "locations": { "$ref": "#/$defs/strings", "description": "Preferred locations; not automatic exclusions" },
+    "work_modes": { "$ref": "#/$defs/strings" },
+    "compensation": { "type": "string" },
+    "deal_breakers": { "$ref": "#/$defs/strings", "description": "User-stated hard exclusions; preserve their scope" },
+    "employment_countries": {
+      "type": "object",
+      "required": ["mode", "countries"],
+      "properties": {
+        "mode": { "enum": ["unspecified", "any", "only", "exclude"] },
+        "countries": { "type": "array", "items": { "type": "string", "pattern": "^[A-Z]{2}$" } }
+      },
+      "allOf": [{
+        "if": { "properties": { "mode": { "enum": ["only", "exclude"] } } },
+        "then": { "properties": { "countries": { "minItems": 1 } } },
+        "else": { "properties": { "countries": { "maxItems": 0 } } }
+      }]
+    },
+    "relocation": {
+      "type": "object",
+      "required": ["willingness", "acceptable_locations", "conditions"],
+      "properties": {
+        "willingness": { "enum": ["unknown", "no", "yes", "conditional"] },
+        "acceptable_locations": { "$ref": "#/$defs/strings" },
+        "conditions": { "$ref": "#/$defs/strings" }
+      },
+      "allOf": [{
+        "if": { "properties": { "willingness": { "const": "conditional" } } },
+        "then": { "properties": { "conditions": { "minItems": 1 } } }
+      }]
+    }
+  },
+  "$defs": {
+    "strings": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  }
+}

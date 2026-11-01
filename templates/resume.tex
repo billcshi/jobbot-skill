@@ -1,0 +1,42 @@
+% SPDX-License-Identifier: 0BSD
+% Copyright (C) 2026 Jiechang Shi and JobBot Skill contributors
+% JobBot original layout. No third-party resume class, macros, fonts or icons
+% are bundled. TeX packages and installed fonts retain their own licenses.
+\documentclass[10pt,%%JOBBOT_PAPER%%]{article}
+\usepackage[margin=0.70in]{geometry}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{lmodern}
+  \input{glyphtounicode}
+  \pdfgentounicode=1
+\else
+  \usepackage{fontspec}
+  \setmainfont{Latin Modern Roman}
+\fi
+%%JOBBOT_LANGUAGE_SETUP%%
+\usepackage{enumitem}
+\usepackage[hidelinks,unicode]{hyperref}
+\usepackage{microtype}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlist[itemize]{leftmargin=1.2em,itemsep=2pt,parsep=0pt,topsep=3pt}
+\pagestyle{empty}
+\raggedright
+\setlength{\emergencystretch}{2em}
+\newcommand{\JobBotSection}[1]{%
+  \par\addvspace{10pt}%
+  {\large\bfseries #1\par}\nobreak
+  \vspace{2pt}\hrule\nobreak\vspace{5pt}}
+\newcommand{\JobBotEntry}[3]{%
+  \par\addvspace{4pt}%
+  \if\relax\detokenize{#2}\relax
+    {\bfseries #1}\hfill{\small #3}\par\nobreak
+  \else
+    {\bfseries #1}\par\nobreak
+    {\small #2\if\relax\detokenize{#3}\relax\else\hfill #3\fi\par}\nobreak
+  \fi}
+\begin{document}
+%%JOBBOT_BODY%%
+\end{document}

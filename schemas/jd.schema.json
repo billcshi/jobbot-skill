@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:jobbot-skill:schema:jd",
+  "title": "JobBot structured job description",
+  "type": "object",
+  "required": ["schema_version", "id", "source", "source_sha256", "text_sha256", "title", "company", "location", "compensation", "responsibilities", "required_qualifications", "preferred_qualifications"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "id": { "type": "string" },
+    "source": { "type": "string" },
+    "source_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "text_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "fetched_at": { "type": "string" },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": { "type": "string", "pattern": "^attachments/" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        }
+      }
+    },
+    "title": { "type": "string" },
+    "company": { "type": "string" },
+    "location": { "type": "string" },
+    "compensation": { "type": "string" },
+    "responsibilities": { "type": "array", "items": { "type": "string" } },
+    "required_qualifications": { "type": "array", "items": { "type": "string" } },
+    "preferred_qualifications": { "type": "array", "items": { "type": "string" } }
+  }
+}

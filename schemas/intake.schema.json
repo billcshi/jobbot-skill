@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Last user-confirmed candidate information review",
+  "type": "object",
+  "required": ["schema_version", "last_reviewed_at", "summary", "profile_sha256", "preferences_sha256"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "last_reviewed_at": { "type": "string", "format": "date-time" },
+    "summary": { "type": "string", "minLength": 1 },
+    "profile_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "preferences_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

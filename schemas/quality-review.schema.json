@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Independent one-shot or subagent document-quality review",
+  "type": "object",
+  "required": ["schema_version", "role", "packet_sha256", "pdf_sha256", "status", "score", "summary", "issues"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "role": { "enum": ["content", "visual", "ats"] },
+    "packet_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "pdf_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "status": { "enum": ["completed", "unavailable"] },
+    "execution_kind": { "enum": ["session", "subagent"] },
+    "reviewer_id": { "type": ["string", "null"] },
+    "score": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+    "summary": { "type": "string", "minLength": 1 },
+    "next_action": { "enum": ["none", "rewrite", "collect_evidence"] },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["severity", "category", "locator", "message", "suggestion"],
+        "properties": {
+          "severity": { "enum": ["high", "medium", "low"] },
+          "category": { "type": "string", "minLength": 1 },
+          "locator": { "type": "string", "minLength": 1 },
+          "message": { "type": "string", "minLength": 1 },
+          "suggestion": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "reviewed_page_hashes": {
+      "type": "object", "minProperties": 1,
+      "additionalProperties": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+    }
+  },
+  "allOf": [{
+    "if": { "required": ["next_action"], "properties": { "next_action": { "const": "collect_evidence" } } },
+    "then": {
+      "properties": {
+        "role": { "const": "content" },
+        "status": { "const": "completed" },
+        "issues": {
+          "contains": {
+            "type": "object",
+            "required": ["severity", "category", "locator", "message", "suggestion"],
+            "properties": {
+              "severity": { "enum": ["medium", "high"] },
+              "category": { "const": "material_gap" },
+              "locator": { "type": "string", "minLength": 1 },
+              "message": { "type": "string", "minLength": 1 },
+              "suggestion": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  }, {
+    "if": { "properties": { "status": { "const": "completed" } } },
+    "then": {
+      "required": ["execution_kind", "reviewer_id"],
+      "properties": { "score": { "type": "number" }, "reviewer_id": { "type": "string", "minLength": 1 } }
+    },
+    "else": { "properties": { "score": { "type": "null" } } }
+  }, {
+    "if": { "properties": { "role": { "const": "visual" }, "status": { "const": "completed" } } },
+    "then": { "required": ["reviewed_page_hashes"] }
+  }]
+}

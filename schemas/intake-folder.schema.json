@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Hash-based intake folder index",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "folders"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "folders": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "folder",
+          "last_scan",
+          "files"
+        ],
+        "properties": {
+          "folder": {
+            "type": "string"
+          },
+          "last_scan": {
+            "type": "string"
+          },
+          "files": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "required": [
+                "path",
+                "status",
+                "source_id",
+                "history"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "new",
+                    "changed",
+                    "unchanged",
+                    "missing",
+                    "unavailable",
+                    "error",
+                    "oversize",
+                    "skipped_symlink",
+                    "skipped_special_file"
+                  ]
+                },
+                "source_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "processing": {
+                  "enum": [
+                    "not_imported",
+                    "pending_read",
+                    "reviewed"
+                  ]
+                },
+                "history": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

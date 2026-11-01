@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "experienced",
+  "country": "US",
+  "request": "Help me organize these materials into a reusable career archive. My name is Morgan Example. These are my own materials and I confirm the facts below. I live in Seattle, US, and must work in the US; I prefer Seattle but would relocate for a remote-friendly backend role with relocation support. I have not decided on an industry. Keep the archive broad. Do not contact anybody or submit applications. Stop after the intake artifacts are ready for independent review; do not ask questions already answered here. This is a synthetic evaluation persona.",
+  "materials": {
+    "career-notes.md": "Morgan Example; morgan@example.invalid; phone unknown; US residence. Work authorization is not provided. Northstar Example, Software Engineer, Seattle, 2021–2024: built a Python API and added integration tests; no measured performance improvement. Harbor Example, Senior Engineer, Seattle, 2024–present: led migration planning with two partner teams, implemented retry handling and incident runbooks. Personal project: Trail Organizer, 2025–2026, built a small Python/SQLite hiking-log tool. Volunteer: community coding mentor, 2023–present, reviewed beginner projects. Education: Example University, B.S. Computer Science, 2017–2021. Skills: Python, SQL, integration testing. No salary minimum has been supplied.",
+    "writing-preferences.md": "I do not want the expression 'results-driven'. Do not put Trail Organizer on a resume, but retain its facts in my archive. These are standing instructions for all my resumes."
+  }
+}

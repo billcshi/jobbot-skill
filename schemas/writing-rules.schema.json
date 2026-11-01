@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Confirmed writing rules",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "rules"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "instruction",
+          "scope",
+          "target",
+          "status",
+          "forbidden_phrases",
+          "excluded_evidence_ids",
+          "confirmation",
+          "confirmed_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "instruction": {
+            "type": "string",
+            "minLength": 1
+          },
+          "confirmation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "confirmed_at": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "enum": [
+              "workspace",
+              "market",
+              "job"
+            ]
+          },
+          "target": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "enum": [
+              "active",
+              "retired"
+            ]
+          },
+          "forbidden_phrases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "excluded_evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "scope": {
+                  "const": "workspace"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "target": {
+                  "type": "null"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "scope": {
+                  "const": "market"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "target": {
+                  "type": "string",
+                  "pattern": "^[A-Z]{2}$"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "scope": {
+                  "const": "job"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "target": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

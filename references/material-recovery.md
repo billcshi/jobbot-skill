@@ -1,0 +1,33 @@
+# Recover missing experience material through conversation
+
+Use when intake, selection, writing or content review finds that important work cannot be explained convincingly from the available archive. This is a targeted return to collection, not a restart of onboarding. A truthful short sentence is not sufficient reason to skip a useful question. Respect an explicit request to use existing information without questions; retain an honestly limited draft if material remains insufficient.
+
+## Diagnose before asking
+
+Read the full index, relevant original sources and notes first. Distinguish three causes:
+
+- **Available but unused:** retrieve the detail and rewrite. Do not ask the candidate to repeat it.
+- **Missing material:** the central contribution, problem solved, implementation decision, validation or meaningful deliverable is still unclear, and further wording changes would only repeat the same sparse facts. Save the gap and ask a focused question.
+- **Genuine limitation or declined disclosure:** the person has no further relevant experience, cannot recall details, or does not wish to share. Preserve the answer, stop probing that gap, and explain the document's limits without inventing facts or certifying readiness.
+
+Assess the document's main case for the selected role, not whether every entry has every field. A concise, specific project can be sufficient. Missing percentages, paid work, production deployment or a larger project count alone never establishes a material gap. During broad intake, use these lenses across the person's history independently of the JD; a later recovery cycle may focus on the selected experiences while retaining all new facts in the reusable archive.
+
+Use [level calibration](level-calibration.md) to distinguish unexplained work from a confirmed target-scope gap. A candidate who explicitly did not own design, rollout or cross-team work must not be repeatedly questioned to manufacture it. Record a `level_fit` limitation in matching/content review, stop futile rewrites and retain an honest limited/stretch draft when no truthful improvement remains. Do not lower the target level to make the current draft pass.
+
+## Run a real dialogue
+
+Ask a small batch of one to three related questions, grounded in what is already known. For example: “You mentioned a CSV importer. Walk me through one file from upload to saved records: what did you implement, and what happened when the input was invalid?” Follow the answer with a question about an actual ambiguity or promising detail, such as how the candidate noticed a problem, chose an approach, checked its behavior or divided work with teammates. Do not suggest a technology, metric or accomplishment as if it happened, and do not require the user to accept a polished claim before explaining their experience.
+
+Wait for an actual answer before writing it as evidence. In a test, the primary skill executor must genuinely exchange messages with a separate candidate actor; a writer generating both questions and answers in one response is not multi-turn execution. Preserve each question, reply, confirmation/correction and source locator before the next handoff. Summarize substantial inferences for correction; a clear direct answer is usable without another approval ritual.
+
+Use at most two question batches per identified gap by default, tracked across sessions in the run checkpoint. A later gap is distinct only if its missing information and purpose differ; renaming the same question does not reset the count. Ask further only when the user explicitly wants to continue that line of inquiry. Initial collection can cover different experiences; this limit prevents a stalled recovery cycle from becoming an endless interview. If the user is unavailable, leave `awaiting_candidate` and the next question saved. If they decline or the limit is reached, retain `limited_draft` with the unresolved gap; do not label it fully approved. Neither silence nor elapsed time is confirmation.
+
+## Save and resume without losing history
+
+Use `runs/<run-id>/material-followups/<gap-id>/` for the gap record, source searches, question batches, actual replies and concise resolution note. Identify the triggering stage/issue, affected experience IDs, why the detail matters, what was already searched, status, question count and related review/document IDs. Maintain the index and next action in `run.json`; these records and scheduling are host-managed, not a new CLI interview engine.
+
+Import actual new replies/material as evidence, retain prior profile bytes, and add supported facts to the proper employment/project/research/course/activity entry with stable IDs and source references. Preserve approximate values, unknowns and corrections. Update `intake.json` only after a real confirmed information update or explicit no-change check-in, never just for a question, a refusal, or document generation. Review affected intake changes independently, refresh affected matching/source bindings and show the reviewed assessment again if changed; do not reuse stale hashes or replay unaffected collection/discovery work.
+
+Before the first PDF, the primary's material-readiness check belongs in `selection.json`: if a substantive gap is already known, collect first rather than rendering an avoidably thin draft. No duplicate pre-render reviewer is required. If a document panel discovers the gap later, preserve its exact draft/reports. A completed content report uses `next_action: collect_evidence` with an actionable medium/high `material_gap` issue, including the missing context, searched evidence and a focused question in its locator/message/suggestion. The helper returns `needs_material` when rounds remain; a high visual or total score cannot override it. Missing reviewers still produce `blocked`; at the round limit the result is `exhausted` with the collection action retained.
+
+After actual source-context changes and affected reviews, revise the plan and render, then use `--prepare --new-version --reason REASON` on the same document. Keep the original writer or record an actual handoff, retain old packets and share the existing total round budget. Wording-only or formatting-only edits cannot resume a `needs_material` round. Input-change checks do not semantically prove that an answer resolves the gap; the next independent content reviewer must assess that. Conversations do not consume another document round, but they do not restore rounds already spent. Exhausted budgets require explicit additional-budget authorization before another panel. When the user cannot add material, give the limited retained draft and unresolved issues if wanted; do not reroll a score or silently convert it to a pass.

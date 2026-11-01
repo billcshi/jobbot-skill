@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:jobbot-skill:schema:onboarding",
+  "title": "Conversational onboarding state",
+  "type": "object",
+  "required": ["schema_version", "updated_at", "sections"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "updated_at": { "type": "string" },
+    "sections": {
+      "type": "object",
+      "required": ["market", "identity", "experience", "education", "skills", "preferences"],
+      "additionalProperties": false,
+      "properties": {
+        "market": { "$ref": "#/$defs/section" },
+        "identity": { "$ref": "#/$defs/section" },
+        "experience": { "$ref": "#/$defs/section" },
+        "education": { "$ref": "#/$defs/section" },
+        "skills": { "$ref": "#/$defs/section" },
+        "preferences": { "$ref": "#/$defs/section" }
+      }
+    }
+  },
+  "$defs": {
+    "section": {
+      "type": "object",
+      "required": ["status", "summary", "confirmed_at"],
+      "properties": {
+        "status": { "enum": ["pending", "confirmed"] },
+        "summary": { "type": "string" },
+        "confirmed_at": { "type": "string" }
+      }
+    }
+  }
+}

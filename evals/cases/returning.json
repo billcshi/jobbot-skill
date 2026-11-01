@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "returning",
+  "country": "US",
+  "request": "Continue from my existing archive. This is my third resume. I confirm there have been no changes since the previous check-in, and I want to reuse my facts and settings. Organize a selection plan for the supplied role without another interview. Do not submit applications. This is a synthetic evaluation persona.",
+  "seed": "returning-worker",
+  "materials": {
+    "job.txt": "Example Cloud: Backend Engineer, Seattle, US. Build Python APIs and reliable background jobs. Integration testing required. No published application deadline."
+  }
+}

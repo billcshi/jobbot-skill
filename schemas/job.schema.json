@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mutable job status, independent of the frozen JD and generated documents",
+  "type": "object",
+  "required": ["schema_version", "id", "company_id", "source_observed_at", "last_verified_at", "expires_at", "availability", "application_deadline", "deadline_source"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "id": { "type": "string", "minLength": 1 },
+    "company_id": { "type": ["string", "null"] },
+    "source_observed_at": { "type": ["string", "null"], "format": "date-time" },
+    "last_verified_at": { "type": ["string", "null"], "format": "date-time" },
+    "expires_at": { "type": ["string", "null"], "format": "date-time", "description": "Local information freshness boundary; not the employer's closing time" },
+    "availability": { "enum": ["unknown", "open", "closed"] },
+    "application_deadline": { "type": ["string", "null"], "format": "date-time" },
+    "deadline_source": { "type": ["string", "null"] }
+  },
+  "allOf": [{
+    "if": { "properties": { "application_deadline": { "type": "string" } } },
+    "then": { "properties": { "deadline_source": { "type": "string", "minLength": 1 } } }
+  }, {
+    "if": { "properties": { "availability": { "enum": ["open", "closed"] } } },
+    "then": { "properties": { "last_verified_at": { "type": "string", "format": "date-time" } } }
+  }]
+}

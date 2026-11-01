@@ -1,0 +1,417 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Independent sub-agent stage review report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "review_id",
+    "stage",
+    "scope_id",
+    "producer_agent_id",
+    "reviewer_agent_id",
+    "reviewer_role",
+    "packet_sha256",
+    "reviewed_at",
+    "verdict",
+    "summary",
+    "inspected_paths",
+    "inspection_limits",
+    "findings"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "review_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stage": {
+      "enum": [
+        "intake",
+        "discovery",
+        "screening",
+        "tailoring",
+        "document"
+      ]
+    },
+    "scope_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "producer_agent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reviewer_agent_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Actual independent agent or isolated session identity; historical field name"
+    },
+    "packet_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "verdict": {
+      "enum": [
+        "passed",
+        "needs_revision",
+        "unavailable"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inspected_paths": {
+      "type": "array",
+      "description": "Paths relative to the user workspace",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "inspection_limits": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "severity",
+          "locator",
+          "message",
+          "requested_change"
+        ],
+        "properties": {
+          "severity": {
+            "enum": [
+              "blocking",
+              "advisory"
+            ]
+          },
+          "locator": {
+            "type": "string",
+            "minLength": 1
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "requested_change": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "document_review": {
+      "type": "object",
+      "required": [
+        "pdf_sha256",
+        "content",
+        "visual"
+      ],
+      "properties": {
+        "pdf_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "content": {
+          "$ref": "#/$defs/auditReview"
+        },
+        "visual": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/auditReview"
+            },
+            {
+              "required": [
+                "reviewed_pages"
+              ],
+              "properties": {
+                "reviewed_pages": {
+                  "type": "array",
+                  "description": "Paths relative to the job directory, exactly as audit.json.pages",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reviewer_role": {
+      "enum": [
+        "candidate-experience-editor",
+        "recruiting-source-investigator",
+        "search-constraints-advisor",
+        "hiring-perspective-editor",
+        "document-quality-auditor"
+      ]
+    },
+    "execution_kind": {
+      "enum": [
+        "subagent",
+        "session"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "enum": [
+              "passed",
+              "needs_revision"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "reviewer_agent_id": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "const": "passed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "inspected_paths": {
+            "minItems": 1
+          },
+          "findings": {
+            "items": {
+              "properties": {
+                "severity": {
+                  "const": "advisory"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "document"
+          },
+          "verdict": {
+            "const": "passed"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "document_review"
+        ],
+        "properties": {
+          "document_review": {
+            "properties": {
+              "content": {
+                "properties": {
+                  "status": {
+                    "const": "passed"
+                  }
+                }
+              },
+              "visual": {
+                "properties": {
+                  "status": {
+                    "const": "passed"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "intake"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "reviewer_role": {
+            "const": "candidate-experience-editor"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "discovery"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "reviewer_role": {
+            "const": "recruiting-source-investigator"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "screening"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "reviewer_role": {
+            "const": "search-constraints-advisor"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "tailoring"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "reviewer_role": {
+            "const": "hiring-perspective-editor"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "document"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "reviewer_role": {
+            "const": "document-quality-auditor"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "auditReview": {
+      "type": "object",
+      "required": [
+        "status",
+        "summary",
+        "issues"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "passed",
+            "failed"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "severity",
+              "category",
+              "message"
+            ],
+            "properties": {
+              "severity": {
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              "category": {
+                "type": "string",
+                "minLength": 1
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "passed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "issues": {
+                "items": {
+                  "properties": {
+                    "severity": {
+                      "enum": [
+                        "low",
+                        "medium"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

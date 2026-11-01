@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "student",
+  "country": "US",
+  "request": "Build my reusable career archive from this folder. I am Taylor Example; these materials are mine and the listed facts are correct. I have no paid work experience and no settled target role. I live in Boston, US and want US employment; work authorization has not been discussed. Collect broadly. Do not require efficiency percentages. Stop when the archive is ready for independent intake review. This is a synthetic evaluation persona.",
+  "materials": {
+    "transcript.txt": "Taylor Example, Example Institute, B.S. Electrical Engineering, 2023–2027 expected. Embedded Systems: A, 2025. Python Programming: A-, 2024. These are course/grade records, not descriptions of assignments.",
+    "project-notes.md": "Embedded Systems final project: Sensor Logger, 2025. A team of three; I implemented serial data collection and debugged timing errors. Another member designed the circuit. Python course assignment: Study Planner, 2024; I wrote the scheduling logic and tests. No timing or efficiency measurements. Research volunteer, Example Institute, 2026: cleaned sensor CSV data and plotted readings in Python. Club workshop helper, 2024–2025: helped run two introductory programming sessions. Contact email: taylor@example.invalid; phone unknown."
+  }
+}

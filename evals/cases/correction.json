@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "correction",
+  "country": "US",
+  "seed": "returning-worker",
+  "request": "Update my archive and explain which saved work needs refreshing. The old note saying 30% time saved is wrong. The task used to take about 20 minutes per run and now takes about 12, based on my recollection, not a benchmark. Keep it approximate; a nonnumeric version is also fine. Preserve my old files as history and do not silently update already delivered PDFs. This is a synthetic evaluation persona.",
+  "materials": {
+    "correction.md": "The estimate applies to one reporting run. I wrote the script myself at Northstar Example in 2024. The 20-minute and 12-minute figures include my manual checking time and are rough recollections. The historical 30% number should no longer be used."
+  }
+}

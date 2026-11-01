@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:jobbot-skill:schema:audit",
+  "title": "JobBot hash-bound content and visual audit",
+  "type": "object",
+  "required": ["schema_version", "job_id", "market_sha256", "profile_sha256", "jd_sha256", "resume_json_sha256", "latex_sha256", "pdf_sha256", "pages", "content", "visual"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "job_id": { "type": "string" },
+    "market_sha256": { "type": "string" },
+    "profile_sha256": { "type": "string" },
+    "jd_sha256": { "type": "string" },
+    "resume_json_sha256": { "type": "string" },
+    "latex_sha256": { "type": "string" },
+    "pdf_sha256": { "type": "string" },
+    "pages": { "type": "array", "items": { "type": "string" } },
+    "content": { "$ref": "#/$defs/review" },
+    "visual": { "$ref": "#/$defs/review" }
+  },
+  "$defs": {
+    "review": {
+      "type": "object",
+      "required": ["status", "summary", "issues"],
+      "properties": {
+        "status": { "enum": ["pending", "passed", "failed"] },
+        "summary": { "type": "string" },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["severity", "category", "message"],
+            "properties": {
+              "severity": { "enum": ["low", "medium", "high"] },
+              "category": { "type": "string" },
+              "message": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

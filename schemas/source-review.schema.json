@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Hash-bound source reading notes, not confirmed candidate facts",
+  "type": "object",
+  "required": ["schema_version", "source_id", "source_sha256", "prepared_at", "status", "summary", "observations", "candidate_facts", "questions"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "source_id": { "type": "string", "minLength": 1 },
+    "source_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "prepared_at": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["pending", "reviewed"] },
+    "summary": { "type": "string" },
+    "observations": { "type": "array", "items": { "$ref": "#/$defs/locatedText" } },
+    "candidate_facts": { "type": "array", "items": { "$ref": "#/$defs/locatedText" } },
+    "questions": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  },
+  "allOf": [{
+    "if": { "properties": { "status": { "const": "reviewed" } } },
+    "then": { "properties": { "summary": { "minLength": 1, "pattern": "\\S" } } }
+  }],
+  "$defs": {
+    "locatedText": {
+      "type": "object",
+      "required": ["text", "locator"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "locator": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

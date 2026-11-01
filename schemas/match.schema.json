@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Job-match judgments and computed assessment; not a hiring probability",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "rubric_version",
+    "job_id",
+    "profile_sha256",
+    "preferences_sha256",
+    "jd_sha256",
+    "job_status_sha256",
+    "prepared_at",
+    "hard_constraints",
+    "dimensions",
+    "strengths",
+    "gaps",
+    "unresolved"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "rubric_version": {
+      "const": "jobbot-match-v1"
+    },
+    "job_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "profile_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "preferences_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "jd_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "job_status_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "prepared_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "scored_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "hard_constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "constraint",
+          "status",
+          "reason",
+          "source_refs"
+        ],
+        "properties": {
+          "constraint": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "met",
+              "violated",
+              "unknown"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "dimensions": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "weight",
+          "status",
+          "value",
+          "reason",
+          "profile_evidence_ids",
+          "job_references"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "role_alignment",
+              "skills",
+              "location",
+              "industry",
+              "experience_level"
+            ]
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "status": {
+            "enum": [
+              "scored",
+              "unknown",
+              "not_applicable"
+            ]
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "profile_evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "job_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "scored"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": "number"
+                },
+                "job_references": {
+                  "minItems": 1
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "value": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "strengths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "unresolved": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "score": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "tier": {
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "D",
+        null
+      ]
+    },
+    "coverage": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "eligibility": {
+      "enum": [
+        "eligible",
+        "ineligible",
+        "unknown"
+      ]
+    },
+    "assessment_status": {
+      "enum": [
+        "complete",
+        "provisional",
+        "insufficient",
+        "ineligible",
+        "not_current"
+      ]
+    },
+    "judgment_source": {
+      "type": "object",
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

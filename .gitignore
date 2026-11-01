@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.jobbot/
+workspace/
+dist/
+*.zip
+
+# Local credentials and editor metadata
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+.DS_Store

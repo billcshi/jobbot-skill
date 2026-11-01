@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:jobbot-skill:schema:market",
+  "title": "Target-market document settings",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "target_country",
+    "locale",
+    "language",
+    "document_type",
+    "paper_size",
+    "date_style",
+    "spelling",
+    "address_style",
+    "include_photo",
+    "confirmed"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "target_country": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "locale": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string"
+    },
+    "document_type": {
+      "enum": [
+        "resume",
+        "cv"
+      ]
+    },
+    "paper_size": {
+      "enum": [
+        "letter",
+        "a4"
+      ]
+    },
+    "date_style": {
+      "type": "string"
+    },
+    "spelling": {
+      "type": "string"
+    },
+    "address_style": {
+      "enum": [
+        "none",
+        "city-region",
+        "full"
+      ]
+    },
+    "include_photo": {
+      "type": "boolean"
+    },
+    "confirmed": {
+      "type": "boolean"
+    },
+    "latex_engine": {
+      "enum": [
+        "pdflatex",
+        "xelatex",
+        "lualatex"
+      ]
+    },
+    "section_labels": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "experience": {
+          "type": "string",
+          "minLength": 1
+        },
+        "projects": {
+          "type": "string",
+          "minLength": 1
+        },
+        "research": {
+          "type": "string",
+          "minLength": 1
+        },
+        "coursework": {
+          "type": "string",
+          "minLength": 1
+        },
+        "activities": {
+          "type": "string",
+          "minLength": 1
+        },
+        "education": {
+          "type": "string",
+          "minLength": 1
+        },
+        "skills": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

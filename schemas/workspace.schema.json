@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Local workspace settings",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "job_freshness_days"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "job_freshness_days": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3650
+    },
+    "agents": {
+      "type": "object",
+      "properties": {
+        "max_concurrent": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum active delegated model calls (scorers, subagent reviewers, or independent review sessions), excluding primary"
+        },
+        "scoring": {
+          "type": "object",
+          "properties": {
+            "max_concurrent": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "model": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "reasoning_effort": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "max_attempts": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Total attempts per job, including the first attempt"
+            },
+            "provider": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1,
+              "description": "Opaque host-supported provider identifier; null inherits the authorized host route"
+            }
+          }
+        }
+      }
+    },
+    "document_quality": {
+      "type": "object",
+      "properties": {
+        "pass_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "minimum_role_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "max_rewrites": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Rewrites after the first draft; 2 allows at most 3 draft rounds"
+        },
+        "max_review_attempts": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "execution": {
+          "enum": [
+            "auto",
+            "session",
+            "subagent"
+          ]
+        },
+        "review_model": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "visual_model": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "weights": {
+          "type": "object",
+          "required": [
+            "content",
+            "visual"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "content": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1
+            },
+            "visual": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1
+            },
+            "ats": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "review_provider": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "description": "Opaque host-supported provider identifier; null inherits the authorized host route"
+        },
+        "visual_provider": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "description": "Opaque host-supported provider identifier; null inherits the authorized host route"
+        }
+      }
+    }
+  }
+}
