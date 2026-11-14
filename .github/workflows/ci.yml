@@ -1,0 +1,29 @@
+name: JobBot Skill CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    # Keep the core suite independent of host-installed TeX and Poppler.
+    container: python:${{ matrix.python }}-slim-bookworm
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10', '3.14']
+    name: Python ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check CLI help
+        run: python3 scripts/jobbot_skill.py --help
+      - name: Run unit tests
+        run: python3 -m unittest discover -s tests -v
